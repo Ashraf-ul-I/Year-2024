@@ -3,7 +3,7 @@ body {
 }
 
 .user-search-container {
-  display: flex;
+  /* display: flex; */
   position: relative;
 }
 
@@ -78,4 +78,83 @@ body {
 
 .suggestions-list li.active {
   background-color: #ccc;
+}
+
+
+/* CSS for Login Form */
+
+/* Form container */
+.ui-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+/* Form fields */
+.field {
+  margin-bottom: 20px;
+}
+
+/* Label styles */
+.field label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* Input styles */
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  /* Make sure padding and border don't increase the width */
+}
+
+/* Button styles */
+.ui-button-submit {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  /* Green */
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Button hover effect */
+.ui-button-submit:hover {
+  background-color: #45a049;
+}
+
+/* Divider styles */
+.ui_divider {
+  margin: 20px 0;
+  border-top: 1px solid #ccc;
+}
+
+/* Header styles */
+h1 {
+  text-align: center;
+}
+
+/* Remove default margins and paddings */
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+/* Center align form */
+form {
+  text-align: center;
 }

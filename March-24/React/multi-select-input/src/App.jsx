@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 import Pill from "./components/Pill";
+import FormControl from "./components/FormControl";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -132,7 +133,10 @@ function App() {
           </ul>
         </div>
       </div>
+      <FormControl />
     </div>
+
+
   );
 }
 
