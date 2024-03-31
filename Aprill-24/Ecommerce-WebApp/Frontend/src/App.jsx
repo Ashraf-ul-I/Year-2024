@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -16,11 +17,15 @@ import {
 } from 'react-router-dom';
 import CheckoutPage from './pages/CheckoutPage'
 import ProductDetailPage from './pages/ProductDetailPage'
+import NavBar from './features/navbar/Navbar'
+import ProductList from './features/product-list/components/ProductList'
+import Layout from './Layout'
+
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home></Home>,
+    element: <Layout><Home /></Layout>, // Wrap Home component with Layout
   },
   {
     path: '/login',
@@ -32,15 +37,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/cart',
-    element: <CartPage />,
+    element: <Layout><CartPage /></Layout>, // Wrap CartPage component with Layout
   },
   {
     path: '/checkout',
-    element: <CheckoutPage />,
+    element: <Layout><CheckoutPage /></Layout>, // Wrap CheckoutPage component with Layout
   },
   {
     path: '/product-detail',
-    element: <ProductDetailPage />,
+    element: <Layout><ProductDetailPage /></Layout>, // Wrap ProductDetailPage component with Layout
   },
 ]);
 
@@ -49,10 +54,11 @@ function App() {
 
   return (
     <>
+
+
       <div>
         <RouterProvider router={router} />
       </div>
-
     </>
   )
 }

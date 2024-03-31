@@ -5,10 +5,8 @@ import SignupPage from "./SignupPage";
 
 function Home() {
     return (
-        <div>
-            <NavBar>
+        <div>  
                 <ProductList></ProductList>
-            </NavBar>
 
             {/* <SignupPage /> */}
             {/* <LoginAuth /> */}

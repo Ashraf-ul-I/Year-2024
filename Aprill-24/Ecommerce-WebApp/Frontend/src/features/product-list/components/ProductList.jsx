@@ -1,7 +1,7 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { StarIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 
 import {
@@ -12,6 +12,7 @@ import {
     Squares2X2Icon,
 } from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
+import { SelectAllproducts, fetchAllProductAsync, fetchProductsByFiltersAsync } from '../ProductListSlice';
 
 const sortOptions = [
     { name: 'Most Popular', href: '#', current: true },
@@ -23,39 +24,120 @@ const sortOptions = [
 
 const filters = [
     {
-        id: 'color',
-        name: 'Color',
+        id: 'Brands',
+        name: 'Brands',
         options: [
-            { value: 'white', label: 'White', checked: false },
-            { value: 'beige', label: 'Beige', checked: false },
-            { value: 'blue', label: 'Blue', checked: true },
-            { value: 'brown', label: 'Brown', checked: false },
-            { value: 'green', label: 'Green', checked: false },
-            { value: 'purple', label: 'Purple', checked: false },
-        ],
+            { value: 'Apple', label: 'Apple' },
+            { value: 'Samsung', label: 'Samsung' },
+            { value: 'OPPO', label: 'OPPO' },
+            { value: 'Huawei', label: 'Huawei' },
+            { value: 'Microsoft Surface', label: 'Microsoft Surface' },
+            { value: 'Infinix', label: 'Infinix' },
+            { value: 'HP Pavilion', label: 'HP Pavilion' },
+            {
+                value: 'Impression of Acqua Di Gio',
+                label: 'Impression of Acqua Di Gio'
+            },
+            { value: 'Royal_Mirage', label: 'Royal_Mirage' },
+            { value: 'Fog Scent Xpressio', label: 'Fog Scent Xpressio' },
+            { value: 'Al Munakh', label: 'Al Munakh' },
+            { value: 'Lord - Al-Rehab', label: 'Lord   Al Rehab' },
+            { value: "L'Oreal Paris", label: "L'Oreal Paris" },
+            { value: 'Hemani Tea', label: 'Hemani Tea' },
+            { value: 'Dermive', label: 'Dermive' },
+            { value: 'ROREC White Rice', label: 'ROREC White Rice' },
+            { value: 'Fair & Clear', label: 'Fair & Clear' },
+            { value: 'Saaf & Khaas', label: 'Saaf & Khaas' },
+            { value: 'Bake Parlor Big', label: 'Bake Parlor Big' },
+            { value: 'Baking Food Items', label: 'Baking Food Items' },
+            { value: 'fauji', label: 'fauji' },
+            { value: 'Dry Rose', label: 'Dry Rose' },
+            { value: 'Boho Decor', label: 'Boho Decor' },
+            { value: 'Flying Wooden', label: 'Flying Wooden' },
+            { value: 'LED Lights', label: 'LED Lights' },
+            { value: 'luxury palace', label: 'luxury palace' },
+            { value: 'Golden', label: 'Golden' },
+            { value: 'Furniture Bed Set', label: 'Furniture Bed Set' },
+            { value: 'Ratttan Outdoor', label: 'Ratttan Outdoor' },
+            { value: 'Kitchen Shelf', label: 'Kitchen Shelf' },
+            { value: 'Multi Purpose', label: 'Multi Purpose' },
+            { value: 'AmnaMart', label: 'AmnaMart' },
+            { value: 'Professional Wear', label: 'Professional Wear' },
+            { value: 'Soft Cotton', label: 'Soft Cotton' },
+            { value: 'Top Sweater', label: 'Top Sweater' },
+            { value: 'RED MICKY MOUSE..', label: 'RED MICKY MOUSE..' },
+            { value: 'Digital Printed', label: 'Digital Printed' },
+            { value: 'Ghazi Fabric', label: 'Ghazi Fabric' },
+            { value: 'IELGY', label: 'IELGY' },
+            { value: 'IELGY fashion', label: 'IELGY fashion' },
+            { value: 'Synthetic Leather', label: 'Synthetic Leather' },
+            { value: 'Sandals Flip Flops', label: 'Sandals Flip Flops' },
+            { value: 'Maasai Sandals', label: 'Maasai Sandals' },
+            { value: 'Arrivals Genuine', label: 'Arrivals Genuine' },
+            { value: 'Vintage Apparel', label: 'Vintage Apparel' },
+            { value: 'FREE FIRE', label: 'FREE FIRE' },
+            { value: 'The Warehouse', label: 'The Warehouse' },
+            { value: 'Sneakers', label: 'Sneakers' },
+            { value: 'Rubber', label: 'Rubber' },
+            { value: 'Naviforce', label: 'Naviforce' },
+            { value: 'SKMEI 9117', label: 'SKMEI 9117' },
+            { value: 'Strap Skeleton', label: 'Strap Skeleton' },
+            { value: 'Stainless', label: 'Stainless' },
+            { value: 'Eastern Watches', label: 'Eastern Watches' },
+            { value: 'Luxury Digital', label: 'Luxury Digital' },
+            { value: 'Watch Pearls', label: 'Watch Pearls' },
+            { value: 'Bracelet', label: 'Bracelet' },
+            { value: 'LouisWill', label: 'LouisWill' },
+            { value: 'Copenhagen Luxe', label: 'Copenhagen Luxe' },
+            { value: 'Steal Frame', label: 'Steal Frame' },
+            { value: 'Darojay', label: 'Darojay' },
+            { value: 'Fashion Jewellery', label: 'Fashion Jewellery' },
+            { value: 'Cuff Butterfly', label: 'Cuff Butterfly' },
+            { value: 'Designer Sun Glasses', label: 'Designer Sun Glasses' },
+            { value: 'mastar watch', label: 'mastar watch' },
+            { value: 'Car Aux', label: 'Car Aux' },
+            { value: 'W1209 DC12V', label: 'W1209 DC12V' },
+            { value: 'TC Reusable', label: 'TC Reusable' },
+            { value: 'Neon LED Light', label: 'Neon LED Light' },
+            {
+                value: 'METRO 70cc Motorcycle - MR70',
+                label: 'METRO 70cc Motorcycle   MR70'
+            },
+            { value: 'BRAVE BULL', label: 'BRAVE BULL' },
+            { value: 'shock absorber', label: 'shock absorber' },
+            { value: 'JIEPOLLY', label: 'JIEPOLLY' },
+            { value: 'Xiangle', label: 'Xiangle' },
+            { value: 'lightingbrilliance', label: 'lightingbrilliance' },
+            { value: 'Ifei Home', label: 'Ifei Home' },
+            { value: 'DADAWU', label: 'DADAWU' },
+            { value: 'YIOSI', label: 'YIOSI' }
+        ]
     },
     {
         id: 'category',
         name: 'Category',
         options: [
-            { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-            { value: 'sale', label: 'Sale', checked: false },
-            { value: 'travel', label: 'Travel', checked: true },
-            { value: 'organization', label: 'Organization', checked: false },
-            { value: 'accessories', label: 'Accessories', checked: false },
-        ],
-    },
-    {
-        id: 'size',
-        name: 'Size',
-        options: [
-            { value: '2l', label: '2L', checked: false },
-            { value: '6l', label: '6L', checked: false },
-            { value: '12l', label: '12L', checked: false },
-            { value: '18l', label: '18L', checked: false },
-            { value: '20l', label: '20L', checked: false },
-            { value: '40l', label: '40L', checked: true },
-        ],
+            { value: 'smartphones', label: 'smartphones' },
+            { value: 'laptops', label: 'laptops' },
+            { value: 'fragrances', label: 'fragrances' },
+            { value: 'skincare', label: 'skincare' },
+            { value: 'groceries', label: 'groceries' },
+            { value: 'home-decoration', label: 'home decoration' },
+            { value: 'furniture', label: 'furniture' },
+            { value: 'tops', label: 'tops' },
+            { value: 'womens-dresses', label: 'womens dresses' },
+            { value: 'womens-shoes', label: 'womens shoes' },
+            { value: 'mens-shirts', label: 'mens shirts' },
+            { value: 'mens-shoes', label: 'mens shoes' },
+            { value: 'mens-watches', label: 'mens watches' },
+            { value: 'womens-watches', label: 'womens watches' },
+            { value: 'womens-bags', label: 'womens bags' },
+            { value: 'womens-jewellery', label: 'womens jewellery' },
+            { value: 'sunglasses', label: 'sunglasses' },
+            { value: 'automotive', label: 'automotive' },
+            { value: 'motorcycle', label: 'motorcycle' },
+            { value: 'lighting', label: 'lighting' }
+        ]
     },
 ];
 
@@ -63,43 +145,32 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
 
-const products = [
-    {
-        id: 1,
-        name: 'Basic Tee',
-        href: '#',
-        imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-        imageAlt: "Front of men's Basic Tee in black.",
-        price: '$35',
-        color: 'Black',
-    },
-    {
-        id: 2,
-        name: 'Basic Tee',
-        href: '#',
-        imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-        imageAlt: "Front of men's Basic Tee in black.",
-        price: '$35',
-        color: 'Black',
-    },
-    {
-        id: 3,
-        name: 'Basic Tee',
-        href: '#',
-        imageSrc:
-            'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-        imageAlt: "Front of men's Basic Tee in black.",
-        price: '$35',
-        color: 'Black',
-    },
-];
+
+
+
 
 export default function ProductList() {
-    // const count = useSelector(selectCount);
-    // const dispatch = useDispatch();
+
+    const dispatch = useDispatch();
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    const products = useSelector(SelectAllproducts)
+
+    const [filter, setFilter] = useState({});
+
+    const handleFilter = (section, option) => {
+
+
+        // console.log(e, section, option);
+        const newFilter = { ...filter, [section.id]: option.value };
+        console.log(newFilter);
+        setFilter(newFilter)
+        dispatch(fetchProductsByFiltersAsync(newFilter))
+
+    }
+
+    useEffect(() => {
+        dispatch(fetchAllProductAsync())
+    }, [dispatch])
 
     return (
         <div className="bg-white">
@@ -191,6 +262,7 @@ export default function ProductList() {
                                                                             defaultValue={option.value}
                                                                             type="checkbox"
                                                                             defaultChecked={option.checked}
+
                                                                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                                         />
                                                                         <label
@@ -244,10 +316,10 @@ export default function ProductList() {
                                     <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <div className="py-1">
                                             {sortOptions.map((option) => (
-                                                <Menu.Item key={option.name}>
+                                                <Menu.Item key={option.title}>
                                                     {({ active }) => (
                                                         <a
-                                                            href={option.href}
+                                                            href={option.thumbnail}
                                                             className={classNames(
                                                                 option.current
                                                                     ? 'font-medium text-gray-900'
@@ -256,7 +328,7 @@ export default function ProductList() {
                                                                 'block px-4 py-2 text-sm'
                                                             )}
                                                         >
-                                                            {option.name}
+                                                            {option.title}
                                                         </a>
                                                     )}
                                                 </Menu.Item>
@@ -333,6 +405,7 @@ export default function ProductList() {
                                                                     defaultValue={option.value}
                                                                     type="checkbox"
                                                                     defaultChecked={option.checked}
+                                                                    onChange={(e) => handleFilter(section, option)}
                                                                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                                 />
                                                                 <label
@@ -359,32 +432,39 @@ export default function ProductList() {
                                         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                                             {products.map((product) => (
                                                 <Link to="/product-detail">
-                                                    <div key={product.id} className="group relative">
+                                                    <div key={product.id} className="group relative border-solid border-2 p-2 border-grey-200">
                                                         <div className="min-h-80 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                                                             <img
-                                                                src={product.imageSrc}
-                                                                alt={product.imageAlt}
+                                                                src={product.thumbnail}
+                                                                alt={product.title}
                                                                 className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                                                             />
                                                         </div>
                                                         <div className="mt-4 flex justify-between">
                                                             <div>
                                                                 <h3 className="text-sm text-gray-700">
-                                                                    <a href={product.href}>
+                                                                    <a href={product.thumbnail}>
                                                                         <span
                                                                             aria-hidden="true"
                                                                             className="absolute inset-0"
                                                                         />
-                                                                        {product.name}
+                                                                        {product.title}
                                                                     </a>
                                                                 </h3>
                                                                 <p className="mt-1 text-sm text-gray-500">
-                                                                    {product.color}
+                                                                    <StarIcon className='w-6 h-6 inline '></StarIcon>
+                                                                    <span className="align-bottom">{product.rating}</span>
                                                                 </p>
                                                             </div>
-                                                            <p className="text-sm font-medium text-gray-900">
-                                                                {product.price}
-                                                            </p>
+                                                            <div>
+                                                                <p className="text-sm font-medium text-gray-900">
+                                                                    ${Math.round((product.price) - (product.price * (25 / 100)))}
+                                                                </p>
+                                                                <p className="text-sm font-medium text-gray-900 line-through">
+                                                                    ${product.price}
+                                                                </p>
+
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </Link>
