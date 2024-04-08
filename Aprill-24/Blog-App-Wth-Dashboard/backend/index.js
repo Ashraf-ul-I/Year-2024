@@ -5,7 +5,18 @@ import userRoutes from '../backend/routes/user.route.js';
 import authRoutes from '../backend/routes/auth.route.js'
 const app = express();
 
+//middlewares
 app.use(express.json());
+//error middlewares 
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Internal Sever Error";
+    res.status(statusCode).json({
+        success: false,
+        statusCode, message
+    });
+})
+
 
 dotenv.config()
 mongoose.connect(
