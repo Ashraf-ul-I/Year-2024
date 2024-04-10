@@ -73,12 +73,15 @@ export const googleAuth = async (req, res, next) => {
     try {
         const user = await User.findOne({ email });
         if (user) {
+            // user.profilePicture = googlePhotoUrl;
+            //if user existed then only generate the token and login to the page..
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
             const { password, ...rest } = user._doc;
             res.status(200).cookie('access_token', token, {
                 httpOnly: true,
             }).json(rest);
         } else {
+            // if user is not exixted them it will save user to the database then created a token for cookie
             const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
             const hashPassword = bcryptjs.hashSync(generatedPassword, 10);
             const newUser = new User({
