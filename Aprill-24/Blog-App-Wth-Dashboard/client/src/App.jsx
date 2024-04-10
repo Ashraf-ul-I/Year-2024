@@ -8,8 +8,10 @@ import DashboardPage from './pages/DashboardPage'
 import ProjectsPage from './pages/ProjectsPage'
 import Header from './components/Header'
 import Footer from './components/Footer'
+
 const App = () => {
   return (
+ 
     <BrowserRouter>
       <Header />
       <Routes>
