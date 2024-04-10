@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import OAuth from '../components/OAuth';
 const SignUpPage = () => {
   const [formdata, setFormdata] = useState({});
   const [errorMessage, setErrormessage] = useState(null);
@@ -86,6 +87,7 @@ const SignUpPage = () => {
 
             </div>
             <Button gradientDuoTone='purpleToPink' type='submit' disabled={loading}>{loading ? (<Spinner size='sm'><span className='pl-3'>Loading...</span></Spinner>) : 'Sign -Up'}</Button>
+            <OAuth />
           </form>
 
           <div className='flex gap-2 text-sm mt-5'>
