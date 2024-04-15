@@ -3,10 +3,13 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 import userRoutes from '../backend/routes/user.route.js';
 import authRoutes from '../backend/routes/auth.route.js'
+import cookieParser from 'cookie-parser';
+
 const app = express();
 
 //middlewares
 app.use(express.json());
+app.use(cookieParser());
 //error middlewares 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
