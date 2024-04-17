@@ -7,7 +7,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { UpdateSuccess, deleteFailure, deleteStart, deleteSuccess, signoutFail, signoutSuccess, updateFailure, updateStart } from '../redux/user/userSlice.js';
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
-
+import { useNavigate } from 'react-router-dom';
 
 const DashProfile = () => {
     const { currentUser, error } = useSelector(state => state.user);
@@ -22,7 +22,7 @@ const DashProfile = () => {
     const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
     const [updateUserFail, setUpdateUserFail] = useState(null);
     const [showModal, setshowModal] = useState(false);
-
+    const navigate = useNavigate();
 
 
     console.log(imageFileUploadProgress, imageFileUploadError);
@@ -48,44 +48,38 @@ const DashProfile = () => {
         console.log(currentUser);
         if (Object.keys(formData).length === 0) {
             setUpdateUserFail('No changes made');
-
-            return
-        }
-
-        if (imageFileUploading) {
-            setUpdateUserFail('Please Wait for Image Upload ');
             return;
         }
-        try {
-            dispatch(updateStart())
-            const updateProfile = await fetch(`/api/user/update/${currentUser._id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            })
+        // Check if an image is selected for upload and if it's not currently uploading
+        if (!imageFile || !imageFileUploading) {
+            try {
+                dispatch(updateStart());
+                const updateProfile = await fetch(`/api/user/update/${currentUser._id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
 
-            const data = await updateProfile.json();
-            console.log('data', data);
-            if (!updateProfile.ok) {
-                dispatch(updateFailure(data.message));
-                setUpdateUserFail(data.message);
+                const data = await updateProfile.json();
 
-            } else {
-                dispatch(UpdateSuccess(data));
-                setUpdateUserSuccess(`User's Profile update Successfully`);
-                console.log("setUpdateSuccess is set t0:=> ", updateUserSuccess);
-                navigate('/dashboard?tab=profile');
-
+                if (!updateProfile.ok) {
+                    dispatch(updateFailure(data.message));
+                    setUpdateUserFail(data.message);
+                } else {
+                    dispatch(UpdateSuccess(data));
+                    setUpdateUserSuccess(`User's Profile update Successfully`);
+                    navigate('/dashboard?tab=profile');
+                }
+            } catch (error) {
+                dispatch(updateFailure(error.message));
+                setUpdateUserFail(error.message);
             }
-
-        } catch (error) {
-            dispatch(updateFailure(error.message));
-            setUpdateUserFail(error.message);
-
+        } else {
+            // Handle the case when an image is uploading
+            setUpdateUserFail('Please Wait for Image Upload');
         }
+    };
 
-
-    }
 
     useEffect(() => {
         if (imageFile) {
@@ -192,7 +186,7 @@ const DashProfile = () => {
             </div>
             {updateUserSuccess && (<Alert color={'success'} className='mt-5'>{updateUserSuccess}</Alert>)}
             {updateUserFail && (<Alert color={'failure'} className='mt-5'>{updateUserFail}</Alert>)}
-            {error && (<Alert color={'success'} className='mt-5'>{error}</Alert>)}
+            {error && (<Alert color={'failure'} className='mt-5'>{error}</Alert>)}
             <Modal show={showModal} onClose={() => setshowModal(false)} popup size='md'>
                 <Modal.Header />
                 <Modal.Body>
