@@ -16,7 +16,7 @@ export const create = async (req, res, next) => {
     console.log(req.user.id);
     console.log(req.user.userId);
     // when worked with backend we get the id from the cookis by using user.userId but when we did it from frontend we need user.id
-    const newPost = new Post({ ...req.body, slug, userId: req.user.userId });
+    const newPost = new Post({ ...req.body, slug, userId: req.user.id });
     try {
 
         if (newPost === null) {
