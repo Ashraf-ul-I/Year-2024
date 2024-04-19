@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 import userRoutes from '../backend/routes/user.route.js';
 import authRoutes from '../backend/routes/auth.route.js'
+import postRoutes from '../backend/routes/adminPost.route.js'
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -31,6 +32,7 @@ mongoose.connect(
 //Routes
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/adminPost', postRoutes);
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000')
