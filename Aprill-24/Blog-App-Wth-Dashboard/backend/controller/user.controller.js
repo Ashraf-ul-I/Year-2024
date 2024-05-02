@@ -53,10 +53,8 @@ export const updateUser = async (req, res, next) => {
 }
 
 export const deleteUser = async (req, res, next) => {
-
     // req.user.id this user id comes from after user hit on  fronted api request 
-    console.log(req.user.id, 'params', req.params.userId)
-    if (req.user.id !== req.params.userId) {
+    if (!req.user.isAdmin && req.user.id !== req.params.userId) {
         return next(errorHandler(403, 'You are not allowed to delete this user'));
     }
     try {
@@ -66,6 +64,7 @@ export const deleteUser = async (req, res, next) => {
         next(error);
     }
 };
+
 
 
 export const signout = (req, res, next) => {
@@ -117,3 +116,5 @@ export const getUsers = async (req, res, next) => {
         next(error);
     }
 }
+
+
