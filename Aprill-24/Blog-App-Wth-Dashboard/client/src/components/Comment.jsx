@@ -3,7 +3,7 @@ import moment from 'moment';
 import { FaThumbsUp } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react'
-const Comment = ({ comment, onLike, onEdit }) => {
+const Comment = ({ comment, onLike, onEdit, onDelete }) => {
     const [user, setUser] = useState({});
     const [isEditing, setIsediting] = useState(false)
     const [isLiked, setIsLiked] = useState(false); // State for tracking like status
@@ -31,6 +31,7 @@ const Comment = ({ comment, onLike, onEdit }) => {
         setEditedContent(comment.content);
 
     }
+
 
     const handleSave = async () => {
         try {
@@ -116,10 +117,16 @@ const Comment = ({ comment, onLike, onEdit }) => {
                                         <p> {(comment.numberOfLikes === 1 ? "like" : "likes")}</p>
                                         {
                                             currentUser && (currentUser._id === comment.userId || currentUser.isAdmin) && (
-                                                <button type='button' onClick={handleEdit} className='text-gray-400 hover:text-orange-500'>Edit</button>
+                                                <button type='button' onClick={handleEdit} className='text-gray-400 hover:text-orange-600'>Edit</button>
+                                            )
+                                        }
+                                        {
+                                            currentUser && (currentUser._id === comment.userId || currentUser.isAdmin) && (
+                                                <button type='button' onClick={() => onDelete(comment._id)} className='text-gray-400 hover:text-red-500'>Delete</button>
                                             )
                                         }
                                     </div>
+
                                 </div></>
                         )
                 }
