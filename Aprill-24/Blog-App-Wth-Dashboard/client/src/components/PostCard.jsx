@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export default function PostCard({ post }) {
+function PostCard({ post }) {
     return (
         <div className='group relative w-full border border-teal-500 hover:border-2 h-[400px] overflow-hidden rounded-lg sm:w-[360px] transition-all'>
             <Link to={`/post/${post.slug}`}>
@@ -23,3 +23,5 @@ export default function PostCard({ post }) {
         </div>
     );
 }
+
+export default PostCard;
