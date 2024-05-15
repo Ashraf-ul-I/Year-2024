@@ -6,6 +6,9 @@ import authRoutes from '../backend/routes/auth.route.js'
 import postRoutes from '../backend/routes/adminPost.route.js'
 import cookieParser from 'cookie-parser';
 import commentRoutes from './routes/comment.route.js'
+import path from 'path'
+
+
 const app = express();
 
 //middlewares
@@ -29,12 +32,20 @@ mongoose.connect(
     console.log('Mongodb is connected ')
 })
 
+const __dirname = path.resolve();
+
 //Routes
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/adminPost', postRoutes);
 app.use('/api/comment', commentRoutes)
+
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+})
+
 app.listen(3000, () => {
     console.log('Server is running on port 3000')
 })
-//16ezaJQ8p3IMJMgC
