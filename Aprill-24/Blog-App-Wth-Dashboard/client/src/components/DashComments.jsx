@@ -1,4 +1,4 @@
-import { Modal, Table, Button } from 'flowbite-react';
+import { Modal, Table, Button, Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
@@ -10,9 +10,11 @@ export default function DashComments() {
     const [showMore, setShowMore] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [commentIdToDelete, setCommentIdToDelete] = useState('');
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const fetchComments = async () => {
             try {
+                setLoading(true);
                 const res = await fetch(`/api/comment/getcomments`);
                 const data = await res.json();
                 if (res.ok) {
@@ -20,8 +22,10 @@ export default function DashComments() {
                     if (data.comments.length < 9) {
                         setShowMore(false);
                     }
+                    setLoading(false);
                 }
             } catch (error) {
+                setLoading(false);
                 console.log(error.message);
             }
         };
@@ -33,6 +37,7 @@ export default function DashComments() {
     const handleShowMore = async () => {
         const startIndex = comments.length;
         try {
+            setLoading(true);
             const res = await fetch(
                 `/api/comment/getcomments?startIndex=${startIndex}`
             );
@@ -42,8 +47,10 @@ export default function DashComments() {
                 if (data.comments.length < 9) {
                     setShowMore(false);
                 }
+                setLoading(false);
             }
         } catch (error) {
+            setLoading(false);
             console.log(error.message);
         }
     };
@@ -70,6 +77,12 @@ export default function DashComments() {
             console.log(error.message);
         }
     };
+
+    if (loading) return (
+        <div className='flex justify-center items-center min-h-screen sm:ml-0 lg:ml-[40%]'>
+            <Spinner size={'xl'} />
+        </div>
+    );
 
     return (
         <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>

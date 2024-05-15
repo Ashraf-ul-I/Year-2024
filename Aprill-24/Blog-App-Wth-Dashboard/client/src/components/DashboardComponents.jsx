@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { HiAnnotation, HiArrowNarrowUp, HiDocumentText, HiOutlineUserGroup } from 'react-icons/hi';
-import { Button, Table } from 'flowbite-react';
+import { Button, Spinner, Table } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 
 const DashboardComponents = () => {
@@ -15,43 +15,54 @@ const DashboardComponents = () => {
     const [lastMonthPosts, setLastMonthPosts] = useState(0);
     const [lastMonthComments, setLastMonthComments] = useState(0);
     const { currentUser } = useSelector((state) => state.user);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+                setLoading(true);
                 const res = await fetch('/api/user/getusers?limit=5');
                 const data = await res.json();
                 if (res.ok) {
                     setUsers(data.users);
                     setTotalUsers(data.totalUsers);
                     setLastMonthUsers(data.lastMonthUsers);
+                    setLoading(false);
                 }
             } catch (error) {
+                setLoading(false);
                 console.log(error.message);
             }
         };
         const fetchPosts = async () => {
             try {
+                setLoading(true);
                 const res = await fetch('/api/adminPost/getposts?limit=5');
                 const data = await res.json();
                 if (res.ok) {
                     setPosts(data.posts);
                     setTotalPosts(data.totalPosts);
                     setLastMonthPosts(data.lastMonthPosts);
+                    setLoading(false);
                 }
             } catch (error) {
+                setLoading(false);
                 console.log(error.message);
             }
         };
         const fetchComments = async () => {
             try {
+                setLoading(true);
                 const res = await fetch('/api/comment/getcomments?limit=5');
                 const data = await res.json();
                 if (res.ok) {
                     setComments(data.comments);
                     setTotalComments(data.totalComments);
                     setLastMonthComments(data.lastMonthComments);
+                    setLoading(false);
                 }
             } catch (error) {
+                setLoading(false);
                 console.log(error.message);
             }
         };
@@ -61,6 +72,13 @@ const DashboardComponents = () => {
             fetchComments();
         }
     }, [currentUser]);
+
+    if (loading) return (
+        <div className='flex justify-center items-center min-h-screen sm:ml-0 lg:ml-[40%]'>
+            <Spinner size={'xl'} />
+        </div>
+    );
+
     return (
         <div className='p-3 md:mx-auto'>
             <div className='flex-wrap flex gap-4 justify-center'>

@@ -57,7 +57,7 @@ const Comment = ({ comment, onLike, onEdit, onDelete }) => {
     }
     useEffect(() => {
         setIsLiked(currentUser && comment.likes.includes(currentUser._id));
-    }, [comment.likes, currentUser]); // Update isLiked when comment.likes or currentUser change
+    }, [comment.likes, currentUser]); 
 
     return (
         <div className='flex p-4 border-b dark:border-gray-600 text-sm'>

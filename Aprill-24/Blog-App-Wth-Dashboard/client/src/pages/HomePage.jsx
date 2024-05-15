@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom';
 import CallToAction from '../components/CallToAction';
 import PostCard from '../components/PostCard';
 
+
 const HomePage = () => {
     const [posts, setPosts] = useState([]);
+   
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const res = await fetch(`/api/adminPost/getPosts`);
+                setLoading(true);  const res = await fetch(`/api/adminPost/getPosts`);
                 const data = await res.json();
                 if (res.ok) {
                     setPosts(data.posts);
@@ -21,7 +23,7 @@ const HomePage = () => {
 
         fetchPosts();
     }, []);
-
+    
     return (
         <div>
             <div className='flex flex-col gap-6 p-28 px-3 max-w-6xl mx-auto'>

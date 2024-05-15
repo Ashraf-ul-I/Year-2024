@@ -1,4 +1,4 @@
-import { Modal, Table, Button } from 'flowbite-react';
+import { Modal, Table, Button, Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -11,9 +11,12 @@ export default function DashPosts() {
     const [showMore, setShowMore] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [postIdToDelete, setPostIdToDelete] = useState('');
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         const fetchPosts = async () => {
             try {
+                setLoading(true);
                 const res = await fetch(`/api/adminPost/getposts?userId=${currentUser._id}`);
                 const data = await res.json();
                 if (res.ok) {
@@ -21,19 +24,24 @@ export default function DashPosts() {
                     if (data.posts.length < 9) {
                         setShowMore(false);
                     }
+                } else {
+                    console.log(data.message);
                 }
             } catch (error) {
                 console.log(error.message);
+            } finally {
+                setLoading(false);
             }
         };
         if (currentUser.isAdmin) {
             fetchPosts();
         }
-    }, [currentUser._id]);
+    }, [currentUser._id, currentUser.isAdmin]);
 
     const handleShowMore = async () => {
         const startIndex = userPosts.length;
         try {
+            setLoading(true);
             const res = await fetch(
                 `/api/adminPost/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
             );
@@ -43,15 +51,20 @@ export default function DashPosts() {
                 if (data.posts.length < 9) {
                     setShowMore(false);
                 }
+            } else {
+                console.log(data.message);
             }
         } catch (error) {
             console.log(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleDeletePost = async () => {
         setShowModal(false);
         try {
+            setLoading(true);
             const res = await fetch(
                 `/api/adminPost/deletepost/${postIdToDelete}/${currentUser._id}`,
                 {
@@ -59,17 +72,25 @@ export default function DashPosts() {
                 }
             );
             const data = await res.json();
-            if (!res.ok) {
-                console.log(data.message);
-            } else {
+            if (res.ok) {
                 setUserPosts((prev) =>
                     prev.filter((post) => post._id !== postIdToDelete)
                 );
+            } else {
+                console.log(data.message);
             }
         } catch (error) {
             console.log(error.message);
+        } finally {
+            setLoading(false);
         }
     };
+
+    if (loading) return (
+        <div className='flex justify-center items-center min-h-screen sm:ml-0 lg:ml-[40%]'>
+            <Spinner size={'xl'} />
+        </div>
+    );
 
     return (
         <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>

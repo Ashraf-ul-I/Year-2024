@@ -1,4 +1,4 @@
-import { Button, Select, TextInput } from 'flowbite-react';
+import { Button, Select, Spinner, TextInput } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PostCard from '../components/PostCard';
@@ -149,7 +149,9 @@ export default function Search() {
           {!loading && posts.length === 0 && (
             <p className='text-xl text-gray-500'>No posts found.</p>
           )}
-          {loading && <p className='text-xl text-gray-500'>Loading...</p>}
+          {loading && <div className='flex justify-center items-center min-h-screen sm:ml-0 lg:ml-[50%] '>
+            <Spinner size={'xl'} />
+          </div>}
           {!loading &&
             posts &&
             posts.map((post) => <PostCard key={post._id} post={post} />)}

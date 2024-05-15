@@ -1,4 +1,4 @@
-import { Modal, Table, Button } from 'flowbite-react';
+import { Modal, Table, Button, Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -12,9 +12,13 @@ export default function DashUser() {
     const [showMore, setShowMore] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [userIdToDelete, setUserIdToDelete] = useState('');
+    const [loading, setLoading] = useState(false);
+
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+                setLoading(true);
                 const res = await fetch(`/api/user/getusers`);
                 const data = await res.json();
                 if (res.ok) {
@@ -22,19 +26,24 @@ export default function DashUser() {
                     if (data.users.length < 9) {
                         setShowMore(false);
                     }
+                } else {
+                    console.log(data.message);
                 }
             } catch (error) {
                 console.log(error.message);
+            } finally {
+                setLoading(false);
             }
         };
         if (currentUser.isAdmin) {
             fetchUsers();
         }
-    }, [currentUser._id]);
+    }, [currentUser._id, currentUser.isAdmin]);
 
     const handleShowMore = async () => {
         const startIndex = users.length;
         try {
+            setLoading(true);
             const res = await fetch(
                 `/api/user/getusers?startIndex=${startIndex}`
             );
@@ -44,9 +53,13 @@ export default function DashUser() {
                 if (data.users.length < 9) {
                     setShowMore(false);
                 }
+            } else {
+                console.log(data.message);
             }
         } catch (error) {
             console.log(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -66,6 +79,14 @@ export default function DashUser() {
             console.log(error.message);
         }
     };
+
+
+    if (loading) return (
+        <div className='flex justify-center items-center sm:min-h-screen sm:ml-0 lg:ml-[40%]'>
+            <Spinner size={'xl'} />
+        </div>
+    )
+
 
 
     return (

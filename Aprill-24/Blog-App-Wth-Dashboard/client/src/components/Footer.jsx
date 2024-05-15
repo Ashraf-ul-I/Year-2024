@@ -18,8 +18,8 @@ const FooterCompo = () => {
                         <div>
                             <Footer.Title title='About' />
                             <Footer.LinkGroup col className="mb-3">
-                                <Footer.Link href='https://www.100projects.com ' target='_blank' rel='noopener noreferrer'>
-                                    100 js projects
+                                <Footer.Link href='https://www.linkedin.com/in/md-ashraful-islam-ba120a1a9/' target='_blank' rel='noopener noreferrer'>
+                                    Linked In
                                 </Footer.Link>
                             </Footer.LinkGroup>
                             <Footer.LinkGroup col className="mb-3">
