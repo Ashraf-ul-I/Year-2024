@@ -11,17 +11,17 @@ function getUpper(val: string) {
 console.log(addTwo(5));
 console.log(getUpper("ashraful"));
 
-interface User {
+interface Users {
     name: string,
     email: string,
     isPaid: boolean
 }
 
-function signUpUser(name: string, email: string, isPaid: boolean): User {
+function signUpUser(name: string, email: string, isPaid: boolean): Users {
     return { name, email, isPaid }
 }
 
-function Login(user: User): void {
+function Login(user: Users): void {
     if (user.isPaid === true) {
         console.log(`${user.name} are logged in with ${user.email} id `);
     }
