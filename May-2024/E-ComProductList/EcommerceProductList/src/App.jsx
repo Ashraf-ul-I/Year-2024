@@ -5,6 +5,7 @@ import NavbarComponent from './Components/NavbarComponent'
 import Product from './Components/Product'
 import {Route, Routes} from 'react-router-dom'
 import ProductDetails from './Components/ProductDetails'
+import CartItems from './Components/CartItems'
 function App() {
 
 
@@ -15,6 +16,7 @@ function App() {
       <Route path='/' element={<Product/>}></Route>
       <Route path='/product' element={<Product/>}></Route>
       <Route path='/product/:id' element={<ProductDetails/>}></Route>
+      <Route path='/cartItems' element={<CartItems/>}></Route>
      </Routes>
    
     </div>

@@ -8,7 +8,9 @@ const Product = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filters, setFilters] = useState({ category: '', price: '' });
-
+  const [lengthProducts,setLengthProducts]=useState(0);
+  const [currentPage,setCurrentPage]=useState(1);
+  const productsPerPage=8;
   useEffect(() => {
     const fetchProducts = async () => {
       const res = await fetch(`https://dummyjson.com/products/`);
@@ -16,6 +18,7 @@ const Product = () => {
         const data = await res.json();
         setProducts(data.products); // Access the products array
         setFilteredProducts(data.products); // Initialize filtered products
+        setLengthProducts(products.length);
       } else {
         console.log('You have no data to show');
       }
@@ -43,6 +46,22 @@ const Product = () => {
     setFilteredProducts(filtered);
   };
 
+  const handlePreviousPage=()=>{
+    if(currentPage>1){
+      setCurrentPage(currentPage-1);
+    }
+  }
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(filteredProducts.length / productsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const indexOflastProduct=currentPage*productsPerPage;
+  const indexOfFirstProduct=indexOflastProduct-productsPerPage;
+  const currentProducts=filteredProducts.slice(indexOfFirstProduct,indexOflastProduct);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div className="flex flex-col">
       <BreadCrumbs className='mx-auto mb-4'/>
@@ -52,12 +71,13 @@ const Product = () => {
         </div>
         
         <div className="w-4/5 grid grid-cols-4 gap-4 p-4">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((item) => (
+          {currentProducts.length > 0 ? ( 
+            currentProducts.map((item) => (
               <div key={item.id} className="bg-white p-4 rounded-lg shadow-md h-full flex flex-col justify-between">
                 <div className="h-48 flex items-center justify-center overflow-hidden">
                   <img src={item.images[0]} alt={item.title} className="max-h-full" />
                 </div>
+                
                 <div className="mt-2">
                   <h2 className="text-lg font-semibold">{item.title}</h2>
                   <p className="text-sm text-gray-600">Stock: {item.stock}</p>
@@ -72,6 +92,19 @@ const Product = () => {
             </div>
           )}
         </div>
+      </div>
+      <div className="flex justify-center mt-4">
+      <Button onClick={handlePreviousPage} disabled={currentPage === 1} className="mx-1 bg-gray-300">
+          Previous
+        </Button>
+        {[...Array(Math.ceil(filteredProducts.length / productsPerPage)).keys()].map(number => (
+          <Button key={number + 1} onClick={() => paginate(number + 1)} className={`mx-1 ${currentPage === number + 1 ? 'bg-blue-500' : 'bg-gray-300'}`}>
+            {number + 1}
+          </Button>
+        ))}
+        <Button onClick={handleNextPage} disabled={currentPage === Math.ceil(filteredProducts.length / productsPerPage)} className="mx-1 bg-gray-300">
+          Next
+        </Button>
       </div>
     </div>
   );
