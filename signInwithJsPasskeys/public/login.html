@@ -1,0 +1,51 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+</head>
+<body>
+    <form action="" id="login-from">
+        <input type="text" name="" id="userId" placeholder="userId">
+        <button type="submit">Login with Passkey</button>
+    </form>
+
+    <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
+   <script>
+
+    const form=document.getElementById('login-from');
+    const userField=document.getElementById('userId');
+
+    form.addEventListener('submit',async (e)=>{
+        e.preventDefault();
+        const userId=userField.value;
+
+        const response=await fetch('/login-challange',{
+            method:'POST',
+            headers:{
+                'Content-type':'application/json'
+            },
+            body:JSON.stringify({userId})
+           })
+
+           const challangeResult=await response.json();
+
+           const {options}=challangeResult;
+
+           const authenticationReponse=await SimpleWebAuthnBrowser.startAuthentication(options);
+
+           console.log(authenticationReponse);
+           
+           await fetch('/login-verify',{
+            method:'POST',
+            headers:{
+                'Content-type':'application/json'
+            },
+            body:JSON.stringify({userId,cred:authenticationReponse})
+           })
+
+    })
+   </script>
+
+</body>
+</html>
