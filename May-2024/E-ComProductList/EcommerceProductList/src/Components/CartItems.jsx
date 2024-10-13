@@ -36,18 +36,32 @@ const CartItems = () => {
     }
   };
 
-  // Combine items with the same id and count their quantities
+  // // Combine items with the same id and count their quantities
+  // const getCombinedItems = (items) => {
+  //   const combinedItems = {};
+  //   for (const [key, item] of Object.entries(items)) {
+  //     if (combinedItems[item.id]) {
+  //       combinedItems[item.id].quantity += 1;
+  //     } else {
+  //       combinedItems[item.id] = { ...item, quantity: 1, dbKey: key };
+  //     }
+  //   }
+  //   return Object.values(combinedItems);
+  // };
+
   const getCombinedItems = (items) => {
-    const combinedItems = {};
-    for (const [key, item] of Object.entries(items)) {
-      if (combinedItems[item.id]) {
-        combinedItems[item.id].quantity += 1;
-      } else {
-        combinedItems[item.id] = { ...item, quantity: 1, dbKey: key };
-      }
+    const combinedItems={};
+    for(const [key,item] of Object.entries(items)){
+     if(combinedItems[item.id]){
+         combinedItems[item.id].quantity +=1
+     }else{
+      combinedItems[item.id]={...item,quantity:1,dbKey:key}
+     }
     }
+
     return Object.values(combinedItems);
-  };
+   };
+
 
   const combinedItems = data ? getCombinedItems(data) : [];
 
