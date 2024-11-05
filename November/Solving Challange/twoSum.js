@@ -20,4 +20,4 @@ const twoSum=(array,target)=>{
 
 };
 
-console.log(twoSum([2,8,11,15,7],9))
+console.log(twoSum([2,7,8,11,15],9))
