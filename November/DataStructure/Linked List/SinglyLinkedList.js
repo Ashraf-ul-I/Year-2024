@@ -92,9 +92,15 @@ class LinkedList{
       this.head=newNode;
       this.length++;
       return this;
-      
-      
 
+    }
+
+    shift(){
+        if(!this.head ){
+            this.head=null;
+            this.tail=null;
+          }
+        
     }
 }
 

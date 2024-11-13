@@ -1,6 +1,7 @@
 const store = require("./app/store");
 const {counterActions}=require('./features/counter/counterSlice')
 const {dynamicCounterActions}=require('./features/counter/dynamicCounter')
+const fetchPosts =require("./post/postSlice").fetchPosts
 store.subscribe(() => {
     // console.log(store.getState());
 });
@@ -12,8 +13,10 @@ store.subscribe(() => {
 
 // store.dispatch(counterActions.decrement());
 
-store.dispatch(dynamicCounterActions.increment(2));
+// store.dispatch(dynamicCounterActions.increment(2));
 
-store.dispatch(dynamicCounterActions.increment(4));
+// store.dispatch(dynamicCounterActions.increment(4));
 
-store.dispatch(dynamicCounterActions.decrement(3));
+// store.dispatch(dynamicCounterActions.decrement(3));
+
+store.dispatch(fetchPosts());
